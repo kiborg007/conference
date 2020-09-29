@@ -3,5 +3,7 @@ CREATE TABLE conference (
 	name varchar(255) not null,
 	thema varchar(255) not null,
 	date varchar(50) not null ,
-	prtspscount INT not null
+	prtspscount INT not null,
+	talkid BIGINT not null ,
+    foreign key (talkid) references talk(id)
 )
