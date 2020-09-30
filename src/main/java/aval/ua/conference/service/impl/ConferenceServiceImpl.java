@@ -14,7 +14,8 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class ConferenceServiceImpl implements ConferenceService {
-    private final ConferenceRepository conferenceRepository ;
+
+    private final ConferenceRepository conferenceRepository;
 
     @Override
     public List<Conference> getAll() {

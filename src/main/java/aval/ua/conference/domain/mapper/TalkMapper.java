@@ -2,14 +2,19 @@ package aval.ua.conference.domain.mapper;
 
 import aval.ua.conference.api.dto.TalkRequest;
 import aval.ua.conference.domain.entity.Talk;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class TalkMapper {
     public List<TalkRequest> mapToTalkRequestList(List<Talk> talks){
         List<TalkRequest> result = new ArrayList();
-        talks.forEach(talk -> result.add(mapToTalkRequest(talk)));
+        if (talks != null) {
+            talks.forEach(talk -> result.add(mapToTalkRequest(talk)));
+        }
         return result;
     }
 

@@ -18,21 +18,24 @@ import static java.util.Arrays.asList;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "CONFERENCE")
 public class Conference {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "conf_id")
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "theme")
     private String theme;
+    @Column(name = "date")
     private String date;
+    @Column(name = "prtspscount")
     private int prtspscount;
-    @OneToMany
+
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "conftalk",
             joinColumns = {@JoinColumn(name = "conf_id")},
             inverseJoinColumns = {@JoinColumn(name = "talk_id")})
-    private List<Talk> talks = new ArrayList<>();
-
-    public void addTalks(Talk... talk) {
-        this.talks.addAll(asList(talk));
-    }
+    private List<Talk> talks;
 }

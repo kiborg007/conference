@@ -2,6 +2,8 @@ package aval.ua.conference.domain.mapper;
 
 import aval.ua.conference.api.dto.ConferenceRequest;
 import aval.ua.conference.domain.entity.Conference;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
 
 @Component
 public class ConfMapper {
+    @Autowired
     TalkMapper talkMapper;
 
     public List<ConferenceRequest> mapToConferenceRequestList(List<Conference> conferences){

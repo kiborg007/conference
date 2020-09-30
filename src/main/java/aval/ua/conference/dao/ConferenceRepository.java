@@ -6,5 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface ConferenceRepository extends CrudRepository<Conference, Long > {
+    @Override
     List<Conference> findAll();
 }
