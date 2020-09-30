@@ -29,7 +29,6 @@ public class ConferenceServiceImpl implements ConferenceService {
         conf.setTheme(request.getTheme());
         conf.setDate(request.getDate());
         conf.setPrtspscount(request.getPrtspscount());
-       // conf.setTalkid(request.getTalkid());
         conferenceRepository.save(conf) ;
         return conf;
     }
