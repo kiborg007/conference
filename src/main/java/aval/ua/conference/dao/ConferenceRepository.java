@@ -1,6 +1,6 @@
 package aval.ua.conference.dao;
 
-import aval.ua.conference.domain.Conference;
+import aval.ua.conference.domain.entity.Conference;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

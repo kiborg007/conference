@@ -1,4 +1,4 @@
-package aval.ua.conference.domain;
+package aval.ua.conference.domain.entity;
 
 import lombok.Data;
 import lombok.Getter;
@@ -19,7 +19,7 @@ public class Conference {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
     private String name ;
-    private String thema ;
+    private String theme ;
     private String date ;
     private int prtspscount ;
 
