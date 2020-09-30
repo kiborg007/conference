@@ -15,6 +15,8 @@ public class ConferenceRequest {
     private String date ;
     @JsonProperty("conference_prtspscount")
     private int prtspscount ;
+    @JsonProperty("conference_talkid")
+    private Long talkid ;
     @JsonProperty("conference_talks")
     private List<TalkRequest> talks_lst;
 }

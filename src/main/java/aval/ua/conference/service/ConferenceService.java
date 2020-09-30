@@ -1,5 +1,6 @@
 package aval.ua.conference.service;
 
+import aval.ua.conference.api.dto.ConferenceRequest;
 import aval.ua.conference.domain.entity.Conference;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public interface ConferenceService {
 
     //-	добавление новой конференции (POST на /conferences) с названием, тематикой,
     // датами проведения и количеством участников
-    Conference addConference(Conference request) ;
+    Conference addConference(ConferenceRequest request) ;
 }

@@ -1,5 +1,6 @@
 package aval.ua.conference.service.impl;
 
+import aval.ua.conference.api.dto.ConferenceRequest;
 import aval.ua.conference.dao.ConferenceRepository;
 import aval.ua.conference.domain.entity.Conference;
 import aval.ua.conference.service.ConferenceService;
@@ -21,13 +22,14 @@ public class ConferenceServiceImpl implements ConferenceService {
     };
 
     @Override
-    public Conference addConference(Conference request) {
+    public Conference addConference(ConferenceRequest request) {
         Conference conf = new Conference() ;
 
         conf.setName(request.getName()) ;
         conf.setTheme(request.getTheme());
         conf.setDate(request.getDate());
         conf.setPrtspscount(request.getPrtspscount());
+        conf.setTalkid(request.getTalkid());
         conferenceRepository.save(conf) ;
         return conf;
     }

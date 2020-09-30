@@ -22,5 +22,6 @@ public class Conference {
     private String theme ;
     private String date ;
     private int prtspscount ;
+    private Long talkid ;
 
 }
