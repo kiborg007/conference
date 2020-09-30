@@ -1,6 +1,5 @@
 package aval.ua.conference.service;
 
-import aval.ua.conference.api.dto.ConferenceDTO;
 import aval.ua.conference.domain.entity.Conference;
 
 import java.util.List;

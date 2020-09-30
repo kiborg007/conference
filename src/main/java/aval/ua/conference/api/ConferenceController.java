@@ -1,15 +1,11 @@
 package aval.ua.conference.api;
 
-import aval.ua.conference.api.dto.ConferenceDTO;
-import aval.ua.conference.domain.entity.Conference;
+import aval.ua.conference.api.dto.ConferenceRequest;
 import aval.ua.conference.domain.mapper.ConferenceRequestDTOMapper;
 import aval.ua.conference.service.ConferenceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -24,9 +20,9 @@ public class ConferenceController {
     //private final ConferenceRequestDTOMapper conferenceRequestDTOMapper;
 
     @GetMapping
-    public List<ConferenceDTO> getConferences() {
-        List<ConferenceDTO> result = new ArrayList();
-       // conferenceService.getAll().forEach(conference -> result.add(conferenceRequestDTOMapper.mapToConferenceDTO(conference)));
+    public List<ConferenceRequest> getConferences() {
+        List<ConferenceRequest> result = new ArrayList();
+      //  conferenceService.getAll().forEach(conference -> result.add(conferenceRequestDTOMapper.mapToConferenceDTO(conference)));
         return result;
     }
 

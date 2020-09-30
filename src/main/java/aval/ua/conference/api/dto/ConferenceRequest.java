@@ -6,7 +6,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class ConferenceDTO {
+public class ConferenceRequest {
     @JsonProperty("conference_name")
     private String name ;
     @JsonProperty("conference_theme")
@@ -16,5 +16,5 @@ public class ConferenceDTO {
     @JsonProperty("conference_prtspscount")
     private int prtspscount ;
     @JsonProperty("conference_talks")
-    private List<TalkDTO> talks_lst;
+    private List<TalkRequest> talks_lst;
 }
