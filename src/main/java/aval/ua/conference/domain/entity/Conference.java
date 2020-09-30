@@ -6,10 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Generated;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -22,6 +20,10 @@ public class Conference {
     private String theme ;
     private String date ;
     private int prtspscount ;
-    private Long talkid ;
+//    @OneToMany
+//    @JoinTable(name = "conf_talk",
+//            joinColumns = {@JoinColumn(name = "id")},
+//            inverseJoinColumns = {@JoinColumn(name = "id")})
+    private List<Talk> talks;
 
 }
