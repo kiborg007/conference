@@ -16,8 +16,8 @@ import java.util.List;
 @RequestMapping("/conferences")
 public class ConferenceController {
 
-    private final ConferenceService conferenceService ;
-    private final ConfMapper conferenceMapper;
+    private ConferenceService conferenceService ;
+    private ConfMapper conferenceMapper;
 
     @GetMapping
     public List<ConferenceRequest> getConferences() {
