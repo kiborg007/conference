@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class ConfMapper {
-    @Autowired
-    TalkMapper talkMapper;
+    private final TalkMapper talkMapper;
 
     public List<ConferenceRequest> mapToConferenceRequestList(List<Conference> conferences){
         List<ConferenceRequest> result = new ArrayList();
@@ -22,6 +22,7 @@ public class ConfMapper {
 
     public ConferenceRequest mapToConferenceRequest(Conference conference){
         ConferenceRequest conferenceRequest = new ConferenceRequest();
+        conferenceRequest.setId(conference.getId());
         conferenceRequest.setName(conference.getName());
         conferenceRequest.setTheme(conference.getTheme());
         conferenceRequest.setDate(conference.getDate());

@@ -7,6 +7,8 @@ import java.util.List;
 @Getter
 @Setter
 public class ConferenceRequest {
+    @JsonProperty("conference_id")
+    private Long id ;
     @JsonProperty("conference_name")
     private String name ;
     @JsonProperty("conference_theme")

@@ -20,10 +20,20 @@ public class TalkMapper {
 
     public TalkRequest mapToTalkRequest(Talk talk){
         TalkRequest talkRequest = new TalkRequest();
+        talkRequest.setId(talk.getId());
         talkRequest.setName(talk.getName());
         talkRequest.setDesc(talk.getDesc());
         talkRequest.setPerson(talk.getPerson());
         talkRequest.setType(talk.getType());
         return talkRequest;
+    }
+
+    public Talk mapToTalk(TalkRequest talkRequest){
+        Talk talk = new Talk();
+        talk.setName(talkRequest.getName());
+        talk.setDesc(talkRequest.getDesc());
+        talk.setPerson(talkRequest.getPerson());
+        talk.setType(talkRequest.getType());
+        return talk;
     }
 }
