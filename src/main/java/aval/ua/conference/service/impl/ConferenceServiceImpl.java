@@ -4,12 +4,16 @@ import aval.ua.conference.api.dto.ConferenceRequest;
 import aval.ua.conference.dao.ConferenceRepository;
 import aval.ua.conference.domain.entity.Conference;
 import aval.ua.conference.domain.entity.Talk;
+import aval.ua.conference.exception.InvalidException;
+import aval.ua.conference.exception.InvalidNameExcrption;
 import aval.ua.conference.service.ConferenceService;
 import aval.ua.conference.service.TalkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -24,17 +28,20 @@ public class ConferenceServiceImpl implements ConferenceService {
     public List<Conference> getAll() { return conferenceRepository.findAll(); };
 
     @Override
-    public Conference getConference(long conf_id) {
-        return conferenceRepository.findById(conf_id).get();
-    }
+    public Conference getConference(Long conf_id) { return conferenceRepository.findById(conf_id).get(); }
 
     @Override
-    public List<Conference> addTalk(long conf_id, Talk talk) {
-        Talk talk_new = talkService.createTalk(talk);
+    public Conference addTalk(long conf_id, Talk talk) {
         Conference conference = conferenceRepository.findById(conf_id).get();
-        conference.getTalks().add(talk_new);
+        if (overTime(conference.getDate())) {
+            throw new InvalidException("Registration time is over");
+        }
+        if(isThreeTalks(conference, talk.getName())) {
+            throw new InvalidNameExcrption("Name of talk is more than 3 times");
+        }
+        conference.getTalks().add(talkService.createTalk(talk));
         conferenceRepository.save(conference);
-        return null;
+        return conference;
     }
 
     @Override
@@ -46,5 +53,21 @@ public class ConferenceServiceImpl implements ConferenceService {
         conf.setPrtspscount(request.getPrtspscount());
         conferenceRepository.save(conf) ;
         return conf;
+    }
+
+    private boolean isThreeTalks (Conference conference, String name) {
+        long cnt = conference.getTalks().stream().filter(talk -> talk.getName().equals(name)).count();
+        System.out.println("isTрreeTalks cnt: " +cnt);
+        return cnt >= 3 ? true : false;
+    }
+
+    private  boolean overTime (Date dateConference) {
+        Calendar c_talk = Calendar.getInstance();
+        Calendar c_conf = Calendar.getInstance();
+        c_talk.setTime(new Date(System.currentTimeMillis()));
+        c_conf.setTime(dateConference);
+        if(c_conf.get(Calendar.MONTH) - c_talk.get(Calendar.MONTH) < 1) {
+            return true;
+        } else return false;
     }
 }

@@ -11,4 +11,5 @@ public interface TalkRepository extends CrudRepository<Talk, Long > {
     @Override
     List<Talk> findAll();
     Optional<Talk> findById(Long id);
+    Optional<Talk> findByName(String name);
 }

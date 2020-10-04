@@ -24,4 +24,15 @@ public class Talk {
     private String desc;
     @Column(name = "person")
     private String person;
+
+    @Override
+    public String toString() {
+        return "Talk{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", desc='" + desc + '\'' +
+                ", person='" + person + '\'' +
+                '}';
+    }
 }

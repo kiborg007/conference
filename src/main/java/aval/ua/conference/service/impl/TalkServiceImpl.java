@@ -2,8 +2,8 @@ package aval.ua.conference.service.impl;
 
 import aval.ua.conference.dao.TalkRepository;
 import aval.ua.conference.domain.entity.Talk;
+import aval.ua.conference.exception.InvalidException;
 import aval.ua.conference.service.TalkService;
-import aval.ua.conference.utils.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +17,11 @@ public class TalkServiceImpl implements TalkService {
 
     @Override
     public Talk createTalk(Talk talk){
-        System.out.println("##### createTalk");
-        Long newId;
-        do {
-            newId = IdGenerator.newId();
-        } while (talkRepository.findById(newId) != null);
-        talk.setId(newId);
-        talkRepository.save(talk);
-        return talk;
+        System.out.println("##### createTalk "+talk);
+        if(talkRepository.findByName(talk.getDesc()).orElse(null) == null){
+            return talkRepository.save(talk);
+        } else throw new InvalidException("The name of the talk already exists");
     }
+
 }
 
