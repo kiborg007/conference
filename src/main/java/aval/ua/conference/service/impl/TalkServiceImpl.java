@@ -18,6 +18,7 @@ public class TalkServiceImpl implements TalkService {
     @Override
     public Talk createTalk(Talk talk){
         System.out.println("##### createTalk "+talk);
+
         if(talkRepository.findByName(talk.getDesc()).orElse(null) == null){
             return talkRepository.save(talk);
         } else throw new InvalidException("The name of the talk already exists");

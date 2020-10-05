@@ -2,11 +2,14 @@ package aval.ua.conference.api;
 
 import aval.ua.conference.api.dto.ConferenceRequest;
 import aval.ua.conference.api.dto.ErrorRequest;
+import aval.ua.conference.api.dto.ErrorResponse;
 import aval.ua.conference.api.dto.TalkRequest;
+import aval.ua.conference.domain.entity.Conference;
 import aval.ua.conference.domain.mapper.ConfMapper;
 import aval.ua.conference.domain.mapper.TalkMapper;
+import aval.ua.conference.exception.InvalidConferenceException;
 import aval.ua.conference.exception.InvalidException;
-import aval.ua.conference.exception.InvalidNameExcrption;
+import aval.ua.conference.exception.InvalidNameException;
 import aval.ua.conference.service.ConferenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,6 +36,14 @@ public class ConferenceController {
         return conferenceMapper.mapToConferenceRequestList(conferenceService.getAll());
     }
 
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    Conference addConference(@RequestBody ConferenceRequest request){
+
+        return conferenceService.addConference(conferenceMapper.mapConferenceRequestToConference(request)) ;
+    }
+
+
     @GetMapping(path ="/talks{conference_id}")
     @ResponseStatus(HttpStatus.OK)
     public ConferenceRequest conferenceById(@PathParam(value = "conference_id") long conference_id) {
@@ -50,13 +61,22 @@ public class ConferenceController {
     @ExceptionHandler(InvalidException.class)
     @ResponseStatus(value= HttpStatus.BAD_REQUEST, reason="Bad Talk")
     ErrorRequest onSaveError(Exception e) {
+
         return new ErrorRequest("400", e.toString());
     }
 
-    @ExceptionHandler(InvalidNameExcrption.class)
+    @ExceptionHandler(InvalidNameException.class)
     @ResponseStatus(value= HttpStatus.CONFLICT, reason="Bad Talk name")
     ErrorRequest onAddError(Exception e) {
+
         return new ErrorRequest("409", e.toString());
+    }
+
+    @ExceptionHandler(InvalidConferenceException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "bad conference name")
+    ErrorResponse onAddConferenceError(Exception e){
+
+        return  new ErrorResponse("409", e.toString()) ;
     }
 
 //    @PostMapping(path = "/conference", consumes = MediaType.APPLICATION_JSON_VALUE,

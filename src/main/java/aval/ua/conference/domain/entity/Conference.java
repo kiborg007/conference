@@ -8,10 +8,7 @@ import org.hibernate.annotations.Generated;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 
@@ -34,21 +31,9 @@ public class Conference {
     @Column(name = "prtspscount")
     private int prtspscount;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "conftalk",
             joinColumns = {@JoinColumn(name = "conf_id")},
             inverseJoinColumns = {@JoinColumn(name = "talk_id")})
-    private List<Talk> talks = new ArrayList<>();
-
-    @Override
-    public String toString() {
-        return "Conference{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", theme='" + theme + '\'' +
-                ", date='" + date + '\'' +
-                ", prtspscount=" + prtspscount +
-                ", talks=" + talks +
-                '}';
-    }
+    private List<Talk> talks;
 }

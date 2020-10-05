@@ -2,6 +2,7 @@ package aval.ua.conference.domain.mapper;
 
 import aval.ua.conference.api.dto.ConferenceRequest;
 import aval.ua.conference.domain.entity.Conference;
+import aval.ua.conference.domain.entity.Talk;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,5 +30,16 @@ public class ConfMapper {
         conferenceRequest.setPrtspscount(conference.getPrtspscount());
         conferenceRequest.setTalks_lst(talkMapper.mapToTalkRequestList(conference.getTalks()));
         return conferenceRequest;
+    }
+
+    public Conference mapConferenceRequestToConference(ConferenceRequest request){
+        Conference conf = new Conference() ;
+        conf.setName(request.getName()) ;
+        conf.setTheme(request.getTheme());
+        conf.setDate(request.getDate());
+        conf.setPrtspscount(request.getPrtspscount());
+        List<Talk> talks  = new ArrayList<Talk>();
+        conf.setTalks(talks);
+        return conf ;
     }
 }
