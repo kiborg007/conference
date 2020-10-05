@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AddConferenceController {
 
     private final ConferenceService service ;
-    @PostMapping(path = "/conferences", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    Conference addConference(@RequestBody ConferenceRequest request){
-        return service.addConference(request) ;
-    }
+//    @PostMapping(path = "/conferences", consumes = MediaType.APPLICATION_JSON_VALUE,
+//            produces = MediaType.APPLICATION_JSON_VALUE)
+//    Conference addConference(@RequestBody ConferenceRequest request){
+//        return service.addConference(request) ;
+//    }
 }
 

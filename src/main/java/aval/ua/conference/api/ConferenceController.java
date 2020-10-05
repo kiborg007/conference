@@ -35,9 +35,9 @@ public class ConferenceController {
 
     @GetMapping(path ="/talks{conference_id}")
     @ResponseStatus(HttpStatus.OK)
-    public ConferenceRequest conferenceById(@PathParam(value = "conference_id") long conference_id) {
+    public List<TalkRequest> conferenceById(@PathParam(value = "conference_id") long conference_id) {
         System.out.println("### RestController getConference"+ conference_id);
-        return conferenceMapper.mapToConferenceRequest(conferenceService.getConference(conference_id));
+        return talkMapper.mapToTalkRequestList(conferenceService.getConference(conference_id).getTalks());
     }
 
     @PostMapping(path = "/talks{conference_id}", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
