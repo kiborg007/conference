@@ -1,7 +1,6 @@
 package aval.ua.conference.api;
 
 import aval.ua.conference.api.dto.ConferenceRequest;
-import aval.ua.conference.api.dto.ErrorRequest;
 import aval.ua.conference.api.dto.ErrorResponse;
 import aval.ua.conference.api.dto.TalkRequest;
 import aval.ua.conference.domain.entity.Conference;
@@ -39,7 +38,6 @@ public class ConferenceController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     Conference addConference(@RequestBody ConferenceRequest request){
-
         return conferenceService.addConference(conferenceMapper.mapConferenceRequestToConference(request)) ;
     }
 
@@ -53,6 +51,7 @@ public class ConferenceController {
 
     @PostMapping(path = "/talks{conference_id}", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
     public ConferenceRequest addTalk(@PathParam(value = "conference_id") long conference_id, @RequestBody TalkRequest talkRequest) {
         System.out.println("### RestController addTalk"+conference_id);
         return conferenceMapper.mapToConferenceRequest(conferenceService.addTalk(conference_id, talkMapper.mapToTalk(talkRequest)));
@@ -60,16 +59,16 @@ public class ConferenceController {
 
     @ExceptionHandler(InvalidException.class)
     @ResponseStatus(value= HttpStatus.BAD_REQUEST, reason="Bad Talk")
-    ErrorRequest onSaveError(Exception e) {
+    ErrorResponse onSaveError(Exception e) {
 
-        return new ErrorRequest("400", e.toString());
+        return new ErrorResponse("400", e.toString());
     }
 
     @ExceptionHandler(InvalidNameException.class)
     @ResponseStatus(value= HttpStatus.CONFLICT, reason="Bad Talk name")
-    ErrorRequest onAddError(Exception e) {
+    ErrorResponse onAddError(Exception e) {
 
-        return new ErrorRequest("409", e.toString());
+        return new ErrorResponse("409", e.toString());
     }
 
     @ExceptionHandler(InvalidConferenceException.class)

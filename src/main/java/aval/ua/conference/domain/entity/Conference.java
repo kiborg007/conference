@@ -35,5 +35,17 @@ public class Conference {
     @JoinTable(name = "conftalk",
             joinColumns = {@JoinColumn(name = "conf_id")},
             inverseJoinColumns = {@JoinColumn(name = "talk_id")})
-    private List<Talk> talks;
+    private List<Talk> talks = new ArrayList<Talk>();
+
+    @Override
+    public String toString() {
+        return "Conference{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", theme='" + theme + '\'' +
+                ", date=" + date +
+                ", prtspscount=" + prtspscount +
+                ", talks=" + talks +
+                '}';
+    }
 }

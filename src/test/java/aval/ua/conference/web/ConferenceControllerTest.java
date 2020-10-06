@@ -73,6 +73,24 @@ public class ConferenceControllerTest {
                 .build();
     }
 
+//    @Test
+//    public void shouldBeReturnedAddTalk() throws Exception {
+//        when(talkMapper.mapToTalk(talkRequest)).thenReturn(talk);
+//        when(conferenceService.addTalk(1L, talk)).thenReturn(conference);
+//        when(conferenceMapper.mapToConferenceRequest(conference)).thenReturn(conferenceRequest);
+//        mockMvc.perform(post("/conferences/talks?conference_id=1")
+//                .contentType("application/json;charset=UTF-8")
+//                .accept(MediaType.APPLICATION_JSON)
+//                .content("{\"id\": 1, \"name\": \"Talk 1\", \"type\": \"\", \"desc\": \"Desc Talk 1\", \"person\": 1 }"))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//               .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+//               // .andExpect(header().string("Location", "/conferences/talks1"))
+//                .andExpect(jsonPath("$.talks_lst").isArray())
+//                .andExpect(jsonPath("$.talks_lst", hasSize(2)));
+//                //.andExpect(jsonPath("$.talks_lst").value("1"));
+//    }
+
     @Test
     public void shouldBeReturnedTalksOfConferenceByID() throws Exception {
         when(conferenceService.getConference(1L)).thenReturn(conference);

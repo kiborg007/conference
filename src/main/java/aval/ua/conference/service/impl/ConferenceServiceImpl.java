@@ -53,7 +53,6 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     @Override
     public Conference addConference(Conference conf) {
-
         if(conferenceRepository.findByName(conf.getName()).orElse(null) == null){
             return conferenceRepository.save(conf) ;
         }else{
