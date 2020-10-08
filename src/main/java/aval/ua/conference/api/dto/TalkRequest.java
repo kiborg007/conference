@@ -11,4 +11,15 @@ public class TalkRequest {
     private String type;
     private String desc;
     private String person;
+
+    @Override
+    public String toString() {
+        return "TalkRequest{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", desc='" + desc + '\'' +
+                ", person='" + person + '\'' +
+                '}';
+    }
 }

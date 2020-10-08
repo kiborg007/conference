@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class TalkMapper {
     public List<TalkRequest> mapToTalkRequestList(List<Talk> talks){
         List<TalkRequest> result = new ArrayList();

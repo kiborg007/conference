@@ -13,17 +13,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import static org.hamcrest.Matchers.*;
 
-import javax.websocket.server.PathParam;
+
+import static java.util.stream.Collectors.joining;
+
 import java.sql.Date;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.when;
@@ -37,9 +37,9 @@ public class ConferenceControllerTest {
     @Mock
     private ConferenceService conferenceService;
     @Mock
-    private ConfMapper conferenceMapper;
-    @Mock
     private TalkMapper talkMapper;
+    @Mock
+    private ConfMapper conferenceMapper;
 
     private MockMvc mockMvc;
 
@@ -51,20 +51,26 @@ public class ConferenceControllerTest {
     @Before
     public void init() {
         talk = new Talk();
+        talk.setId(1L);
         talk.setName("Talk 1");
+        talk.setType("");
         talk.setDesc("Desc Talk 1");
+        talk.setPerson("1");
 
         talkRequest = new TalkRequest();
+        talkRequest.setId(1L);
         talkRequest.setName("Talk 1");
+        talkRequest.setType("");
         talkRequest.setDesc("Desc Talk 1");
+        talkRequest.setPerson("1");
 
         conference = new Conference();
-        conference.setId(1L);
+        conference.setId(2L);
         conference.setDate(new Date(2020, 10, 10));
         conference.setTalks(asList(talk));
 
         conferenceRequest = new ConferenceRequest();
-        conferenceRequest.setId(1L);
+        conferenceRequest.setId(2L);
         conferenceRequest.setDate(new Date(2020, 10, 10));
         conferenceRequest.setTalks_lst(asList(talkRequest));
 
@@ -73,33 +79,41 @@ public class ConferenceControllerTest {
                 .build();
     }
 
-//    @Test
-//    public void shouldBeReturnedAddTalk() throws Exception {
-//        when(talkMapper.mapToTalk(talkRequest)).thenReturn(talk);
-//        when(conferenceService.addTalk(1L, talk)).thenReturn(conference);
-//        when(conferenceMapper.mapToConferenceRequest(conference)).thenReturn(conferenceRequest);
-//        mockMvc.perform(post("/conferences/talks?conference_id=1")
-//                .contentType("application/json;charset=UTF-8")
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content("{\"id\": 1, \"name\": \"Talk 1\", \"type\": \"\", \"desc\": \"Desc Talk 1\", \"person\": 1 }"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//               .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-//               // .andExpect(header().string("Location", "/conferences/talks1"))
-//                .andExpect(jsonPath("$.talks_lst").isArray())
-//                .andExpect(jsonPath("$.talks_lst", hasSize(2)));
-//                //.andExpect(jsonPath("$.talks_lst").value("1"));
-//    }
+    @Test
+    public void shouldBeReturnedAddTalk() throws Exception {
+        when(talkMapper.mapToTalk(talkRequest)).thenReturn(talk);
+        when(conferenceService.addTalk(2L, talk)).thenReturn(conference);
+        when(conferenceMapper.mapToConferenceRequest(conference)).thenReturn(conferenceRequest);
+
+        doPost("/conferences/talks?conference_id=2",
+                "\"id\": 1",
+                "\"type\": \"\"",
+                "\"name\": \"Talk 1\"",
+                "\"desc\": \"Desc Talk 1\"",
+                "\"person\": \"1\"")
+                .andExpect(status().isOk())
+                .andDo(print());
+               // .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+               // .andExpect(jsonPath("$[0].name").value("Talk 1"));
+    }
 
     @Test
     public void shouldBeReturnedTalksOfConferenceByID() throws Exception {
-        when(conferenceService.getConference(1L)).thenReturn(conference);
+        when(conferenceService.getConference(2L)).thenReturn(conference);
         when(talkMapper.mapToTalkRequestList(asList(talk))).thenReturn(asList(talkRequest));
-        mockMvc.perform(get("/conferences/talks?conference_id=1")
+        mockMvc.perform(get("/conferences/talks?conference_id=2")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$[0].name").value("Talk 1"));
+    }
+
+    private ResultActions doPost(String path, String... lines) throws Exception {
+        return mockMvc.perform(post(path)
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(Stream.of(lines)
+                        .collect(joining(",\n", "{\n", "\n}"))));
     }
 
 }

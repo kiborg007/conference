@@ -4,6 +4,7 @@ import aval.ua.conference.api.dto.ConferenceRequest;
 import aval.ua.conference.api.dto.ErrorResponse;
 import aval.ua.conference.api.dto.TalkRequest;
 import aval.ua.conference.domain.entity.Conference;
+import aval.ua.conference.domain.entity.Talk;
 import aval.ua.conference.domain.mapper.ConfMapper;
 import aval.ua.conference.domain.mapper.TalkMapper;
 import aval.ua.conference.exception.InvalidConferenceException;
@@ -49,12 +50,23 @@ public class ConferenceController {
         return talkMapper.mapToTalkRequestList(conferenceService.getConference(conference_id).getTalks());
     }
 
-    @PostMapping(path = "/talks{conference_id}", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/talks{conference_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ConferenceRequest addTalk(@PathParam(value = "conference_id") long conference_id, @RequestBody TalkRequest talkRequest) {
-        System.out.println("### RestController addTalk"+conference_id);
-        return conferenceMapper.mapToConferenceRequest(conferenceService.addTalk(conference_id, talkMapper.mapToTalk(talkRequest)));
+        System.out.println("### RestController addTalk conference_id:"+conference_id);
+        System.out.println("### RestController addTalk talkRequest:"+talkRequest);
+//        TalkRequest talkRequest2 = new TalkRequest();
+//        talkRequest2.setId(1L);
+//        talkRequest2.setName("Talk 1");
+//        talkRequest2.setType("");
+//        talkRequest2.setDesc("Desc Talk 1");
+//        talkRequest2.setPerson("1");
+        Talk talk = talkMapper.mapToTalk(talkRequest);
+        System.out.println("### RestController talk"+talk);
+        ConferenceRequest result = conferenceMapper.mapToConferenceRequest(conferenceService.addTalk(conference_id, talk));
+        System.out.println("### RestController result"+result);
+        return result;
     }
 
     @ExceptionHandler(InvalidException.class)
