@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public interface TalkRepository extends CrudRepository<Talk, Long > {
 
+    List<Talk> findAll();
+    Optional<Talk> findById(Long id);
     Optional<Talk> findTalkByName(String part) ;
     Optional<Talk> findByName(String name);
     List<Talk> findByDesc(String name);

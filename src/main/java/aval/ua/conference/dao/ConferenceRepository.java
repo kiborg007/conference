@@ -12,7 +12,5 @@ public interface ConferenceRepository extends CrudRepository<Conference, Long > 
 
     Optional<Conference> findById(Long id);
 
-    Optional<Conference> findByName(String str);
-
-    //Optional<Conference> findByName(String name);
+    Optional<Conference> findByName(String name);
 }

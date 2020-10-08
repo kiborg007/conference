@@ -9,8 +9,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ConferenceRepositoryTest extends AbstractDaoTest<ConferenceRepository>{
-//    @Test
-//    public void ifThereIsNoConferenceWithSuchNameEmptyOptionalIsReturned() {
-//        assertThat(dao.findById(null), is(equalTo(Optional.empty())));
-//    }
+    @Test
+    public void ifThereIsNoConferenceWithSuchNameEmptyOptionalIsReturned() {
+        assertThat(dao.findById(null), is(equalTo(Optional.empty())));
+    }
 }

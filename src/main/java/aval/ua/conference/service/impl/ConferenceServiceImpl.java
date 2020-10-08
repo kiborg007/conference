@@ -34,20 +34,27 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     @Override
     public Conference getConference(Long conf_id) {
-        return conferenceRepository.findById(conf_id).get();
+        Conference conference = conferenceRepository.findById(conf_id).orElse(null);
+        if(conference != null) {
+            return conference;
+        } else throw new InvalidException("Conference by ID:" + conf_id + " not found");
     }
 
     @Override
     public Conference addTalk(long conf_id, Talk talk) throws  InvalidException, InvalidNameException{
-        Conference conference = conferenceRepository.findById(conf_id).get();
-        if (overTime(conference.getDate())) {
-            throw new InvalidException("Registration time is over");
-        }
-        if(isThreeTalks(conference, talk.getName())) {
-            throw new InvalidNameException("Name of talk is more than 3 times");
-        }
-        conference.getTalks().add(talkService.createTalk(talk));
-        conferenceRepository.save(conference);
+        System.out.println("### addTalk talk conf_id:"+conf_id + ", talk"+talk);
+        Conference conference = conferenceRepository.findById(conf_id).orElse(null);
+        if(conference != null) {
+            if (overTime(conference.getDate())) {
+                System.out.println("isOverTime");
+                throw new InvalidException("Registration time is over");
+            }
+            if (isThreeTalks(conference, talk.getName())) {
+                throw new InvalidNameException("Name of talk is more than 3 times");
+            }
+            conference.getTalks().add(talkService.createTalk(talk));
+            conferenceRepository.save(conference);
+        } else throw new InvalidException("Conference by ID:" + conf_id + " not found");
         return conference;
     }
 
@@ -63,7 +70,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     private boolean isThreeTalks (Conference conference, String name) {
         long cnt = conference.getTalks().stream().filter(talk -> talk.getName().equals(name)).count();
-        System.out.println("isTрreeTalks cnt: " +cnt);
+        System.out.println("isThreeTalks cnt: " +cnt);
         return cnt >= 3 ? true : false;
     }
 
@@ -72,7 +79,9 @@ public class ConferenceServiceImpl implements ConferenceService {
         Calendar c_conf = Calendar.getInstance();
         c_talk.setTime(new Date(System.currentTimeMillis()));
         c_conf.setTime(dateConference);
-        if(c_conf.get(Calendar.MONTH) - c_talk.get(Calendar.MONTH) < 1) {
+        if(c_conf.get(Calendar.YEAR) - c_talk.get(Calendar.YEAR) < 0){
+            return true;
+        } else if(c_conf.get(Calendar.MONTH) - c_talk.get(Calendar.MONTH) < 1) {
             return true;
         } else return false;
     }
