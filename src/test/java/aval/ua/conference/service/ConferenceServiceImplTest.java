@@ -49,7 +49,7 @@ public class ConferenceServiceImplTest {
         Date currentDate = new Date(System.currentTimeMillis());
         int year = currentDate.getDay();
         conference.setDate(new Date(year+1,10,20));
-        when(conferenceRepository.findById(notNull())).thenReturn(java.util.Optional.of(conference));
+        when(conferenceRepository.findById(1L)).thenReturn(java.util.Optional.of(conference));
         assertThat(conferenceService.addTalk(1L, talk), is(conference));
     }
 
@@ -62,7 +62,7 @@ public class ConferenceServiceImplTest {
         Date currentDate = new Date(System.currentTimeMillis());
         int year = currentDate.getDay();
         conference.setDate(new Date(year-1,10,20));
-        when(conferenceRepository.findById(notNull())).thenReturn(java.util.Optional.of(conference));
+        when(conferenceRepository.findById(1L)).thenReturn(java.util.Optional.of(conference));
         assertThat(conferenceService.addTalk(1L, talk), is(invalidException));
         assertThat(invalidException.getMessage(), is("Registration time is over"));
     }

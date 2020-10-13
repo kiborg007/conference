@@ -11,6 +11,6 @@ import static org.junit.Assert.assertThat;
 public class ConferenceRepositoryTest extends AbstractDaoTest<ConferenceRepository>{
     @Test
     public void ifThereIsNoConferenceWithSuchNameEmptyOptionalIsReturned() {
-        assertThat(dao.findById(null), is(equalTo(Optional.empty())));
+        assertThat(dao.findById(1L), is(equalTo(Optional.empty())));
     }
 }

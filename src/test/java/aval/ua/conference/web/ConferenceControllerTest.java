@@ -97,6 +97,14 @@ public class ConferenceControllerTest {
                // .andExpect(jsonPath("$[0].name").value("Talk 1"));
     }
 
+    private ResultActions doPost(String path, String... lines) throws Exception {
+        return mockMvc.perform(post(path)
+                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .content(Stream.of(lines)
+                        .collect(joining(",\n", "{\n", "\n}"))));
+    }
+
     @Test
     public void shouldBeReturnedTalksOfConferenceByID() throws Exception {
         when(conferenceService.getConference(2L)).thenReturn(conference);
@@ -108,13 +116,6 @@ public class ConferenceControllerTest {
                 .andExpect(jsonPath("$[0].name").value("Talk 1"));
     }
 
-    private ResultActions doPost(String path, String... lines) throws Exception {
-        return mockMvc.perform(post(path)
-                .accept(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(Stream.of(lines)
-                        .collect(joining(",\n", "{\n", "\n}"))));
-    }
 
 }
 
