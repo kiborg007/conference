@@ -1,0 +1,22 @@
+GET {{host-url}}/conferences
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+charset: UTF-8
+
+###
+
+GET {{host-url}}/conferences/2/talks
+Content-Type: application/json
+
+###
+
+POST {{host-url}}/conferences/2/talks
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+charset: UTF-8
+
+{  "name": "test",     "theme": "test",     "data": "20201010" }
+
+

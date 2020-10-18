@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TalkRequest {
+public class TalkResponse {
+    private Long id;
     private String name;
     private String type;
     private String desc;
@@ -14,6 +15,7 @@ public class TalkRequest {
     @Override
     public String toString() {
         return "TalkRequest{" +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
                 ", desc='" + desc + '\'' +

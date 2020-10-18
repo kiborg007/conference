@@ -1,12 +1,12 @@
 package aval.ua.conference.service.impl;
 
-import aval.ua.conference.api.dto.ConferenceRequest;
 import aval.ua.conference.dao.ConferenceRepository;
 import aval.ua.conference.domain.entity.Conference;
 import aval.ua.conference.domain.entity.Talk;
 import aval.ua.conference.exception.InvalidConferenceException;
 import aval.ua.conference.exception.InvalidException;
 import aval.ua.conference.exception.InvalidNameException;
+import aval.ua.conference.exception.InvalidTimeRegistrationException;
 import aval.ua.conference.service.ConferenceService;
 import aval.ua.conference.service.TalkService;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -47,14 +45,17 @@ public class ConferenceServiceImpl implements ConferenceService {
         if(conference != null) {
             if (overTime(conference.getDate())) {
                 System.out.println("isOverTime");
-                throw new InvalidException("Registration time is over");
+                throw new InvalidTimeRegistrationException("Registration time is over");
             }
             if (isThreeTalks(conference, talk.getName())) {
                 throw new InvalidNameException("Name of talk is more than 3 times");
             }
             conference.getTalks().add(talkService.createTalk(talk));
+            int members = conference.getTalks().size();
+            conference.setPrtspscount(members);
             conferenceRepository.save(conference);
         } else throw new InvalidException("Conference by ID:" + conf_id + " not found");
+        System.out.println("### addTalk conference:"+conference);
         return conference;
     }
 

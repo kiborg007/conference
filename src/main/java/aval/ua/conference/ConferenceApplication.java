@@ -2,7 +2,8 @@ package aval.ua.conference;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.context.annotation.Bean;
+
 @SpringBootApplication
 //@MapperScan(value = "aval.ua.conference.domain.mapper")
 public class ConferenceApplication {

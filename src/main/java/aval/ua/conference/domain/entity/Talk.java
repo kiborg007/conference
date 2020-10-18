@@ -6,12 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @NoArgsConstructor
-//@RequiredArgsConstructor
 @Entity
 @Table(name = "TALK")
 public class Talk {

@@ -1,11 +1,10 @@
 package aval.ua.conference.web;
 
-import aval.ua.conference.api.dto.ConferenceRequest;
+import aval.ua.conference.api.dto.ConferenceResponse;
 import aval.ua.conference.api.dto.TalkRequest;
 import aval.ua.conference.domain.entity.Conference;
 import aval.ua.conference.domain.entity.Talk;
-import aval.ua.conference.domain.mapper.ConfMapper;
-import aval.ua.conference.domain.mapper.TalkMapper;
+import aval.ua.conference.domain.mapper.MapperDTO;
 import aval.ua.conference.service.ConferenceService;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
@@ -18,9 +17,7 @@ import java.sql.Date;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 public class ConferenceEndpointApiTest extends AbstractEndpointApiTest{
     @Test
@@ -49,7 +46,7 @@ public class ConferenceEndpointApiTest extends AbstractEndpointApiTest{
     @TestConfiguration
     public static class ConferenceTestContext {
         @Bean
-        public CommandLineRunner conferenceInitializer(ConferenceService conferenceService,ConfMapper conferenceMapper,TalkMapper talkMapper) {
+        public CommandLineRunner conferenceInitializer(ConferenceService conferenceService, MapperDTO mapperDTO) {
             System.out.println("!!! Insert test data");
             Talk talk = new Talk();
             talk.setId(1L);
@@ -59,7 +56,7 @@ public class ConferenceEndpointApiTest extends AbstractEndpointApiTest{
             talk.setPerson("1");
 
             TalkRequest talkRequest = new TalkRequest();
-            talkRequest.setId(1L);
+         //   talkRequest.setId(1L);
             talkRequest.setName("Talk 1");
             talkRequest.setType("");
             talkRequest.setDesc("Desc Talk 1");
@@ -70,10 +67,10 @@ public class ConferenceEndpointApiTest extends AbstractEndpointApiTest{
             conference.setDate(new Date(2020, 10, 10));
             conference.setTalks(asList(talk));
 
-            ConferenceRequest conferenceRequest = new ConferenceRequest();
+            ConferenceResponse conferenceRequest = new ConferenceResponse();
             conferenceRequest.setId(2L);
             conferenceRequest.setDate(new Date(2020, 10, 10));
-            conferenceRequest.setTalks_lst(asList(talkRequest));
+            //conferenceRequest.setTalks_lst(asList(talkRequest));
 
 
             return (args) -> conferenceService.addTalk(2L, talk);

@@ -1,6 +1,5 @@
 package aval.ua.conference.service;
 
-import aval.ua.conference.api.dto.ConferenceRequest;
 import aval.ua.conference.domain.entity.Conference;
 import aval.ua.conference.domain.entity.Talk;
 import aval.ua.conference.exception.InvalidException;

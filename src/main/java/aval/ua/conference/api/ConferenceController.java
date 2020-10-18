@@ -1,15 +1,11 @@
 package aval.ua.conference.api;
 
-import aval.ua.conference.api.dto.ConferenceRequest;
-import aval.ua.conference.api.dto.ErrorResponse;
-import aval.ua.conference.api.dto.TalkRequest;
-import aval.ua.conference.domain.entity.Conference;
-import aval.ua.conference.domain.entity.Talk;
-import aval.ua.conference.domain.mapper.ConfMapper;
-import aval.ua.conference.domain.mapper.TalkMapper;
+import aval.ua.conference.api.dto.*;
+import aval.ua.conference.domain.mapper.MapperDTO;
 import aval.ua.conference.exception.InvalidConferenceException;
 import aval.ua.conference.exception.InvalidException;
 import aval.ua.conference.exception.InvalidNameException;
+import aval.ua.conference.exception.InvalidTimeRegistrationException;
 import aval.ua.conference.service.ConferenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,55 +14,50 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.websocket.server.PathParam;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("conferences")
 @RequiredArgsConstructor
-@RequestMapping("/conferences")
 public class ConferenceController {
     private final ConferenceService conferenceService ;
-    private final ConfMapper conferenceMapper;
-    private final TalkMapper talkMapper;
+    private final MapperDTO mapper;
+
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ConferenceRequest> conferences() {
-        System.out.println("### RestController getConferences");
-        return conferenceMapper.mapToConferenceRequestList(conferenceService.getAll());
+    public List<ConferenceResponse> conferences() {
+        System.out.println("### RestController conferences");
+        List<ConferenceResponse> result = new ArrayList();
+        conferenceService.getAll().forEach(conference -> result.add(mapper.mapToDTO(conference)));
+        return result;
     }
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    Conference addConference(@RequestBody ConferenceRequest request){
-        return conferenceService.addConference(conferenceMapper.mapConferenceRequestToConference(request)) ;
+    @ResponseStatus(HttpStatus.OK)
+    public long addConference(@RequestBody ConferenceRequest request){
+        System.out.println("### RestController addConference: " + request);
+        return conferenceService.addConference(mapper.mapFromDTO(request)).getId();
     }
 
 
-    @GetMapping(path ="/talks{conference_id}")
+    @GetMapping(path ="/{conference_id}/talks")
     @ResponseStatus(HttpStatus.OK)
-    public List<TalkRequest> conferenceById(@PathParam(value = "conference_id") long conference_id) {
+    public List<TalkResponse> talks(@PathVariable(value = "conference_id") String conference_id) {
         System.out.println("### RestController getConference"+ conference_id);
-        return talkMapper.mapToTalkRequestList(conferenceService.getConference(conference_id).getTalks());
+        List<TalkResponse> result = new ArrayList();
+        conferenceService.getConference(Long.parseLong(conference_id)).getTalks().forEach(talk -> result.add(mapper.mapToDTO(talk)));
+        return result;
     }
 
-    @PostMapping(path = "/talks{conference_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/{conference_id}/talks", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public ConferenceRequest addTalk(@PathParam(value = "conference_id") long conference_id, @RequestBody TalkRequest talkRequest) {
+    public ConferenceResponse addTalk(@PathVariable(value = "conference_id") long conference_id, @RequestBody TalkRequest talkRequest) throws IOException {
         System.out.println("### RestController addTalk conference_id:"+conference_id);
-        System.out.println("### RestController addTalk talkRequest:"+talkRequest);
-//        TalkRequest talkRequest2 = new TalkRequest();
-//        talkRequest2.setId(1L);
-//        talkRequest2.setName("Talk 1");
-//        talkRequest2.setType("");
-//        talkRequest2.setDesc("Desc Talk 1");
-//        talkRequest2.setPerson("1");
-        Talk talk = talkMapper.mapToTalk(talkRequest);
-        System.out.println("### RestController talk"+talk);
-        ConferenceRequest result = conferenceMapper.mapToConferenceRequest(conferenceService.addTalk(conference_id, talk));
-        System.out.println("### RestController result"+result);
-        return result;
+        return mapper.mapToDTO(conferenceService.addTalk(conference_id, mapper.mapFromDTO(talkRequest)));
     }
 
     @ExceptionHandler(InvalidException.class)
@@ -84,16 +75,17 @@ public class ConferenceController {
     }
 
     @ExceptionHandler(InvalidConferenceException.class)
-    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "bad conference name")
+    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Bad conference name")
     ErrorResponse onAddConferenceError(Exception e){
 
         return  new ErrorResponse("409", e.toString()) ;
     }
 
-//    @PostMapping(path = "/conference", consumes = MediaType.APPLICATION_JSON_VALUE,
-//            produces = MediaType.APPLICATION_JSON_VALUE)
-//    Conference addConference(@RequestBody ConfRequest request){
-//        return conferenceService.addConference(request) ;
-//    }
+    @ExceptionHandler(InvalidTimeRegistrationException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Registration time is over")
+    ErrorResponse onAddTalkError(Exception e){
+
+        return  new ErrorResponse("409", e.toString()) ;
+    }
 
 }

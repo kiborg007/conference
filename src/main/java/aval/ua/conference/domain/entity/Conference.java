@@ -1,23 +1,23 @@
 package aval.ua.conference.domain.entity;
 
-import lombok.Data;
+import aval.ua.conference.api.dto.ConferenceRequest;
+import aval.ua.conference.api.dto.ConferenceResponse;
+import aval.ua.conference.domain.mapper.MapperDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Generated;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.*;
-
-import static java.util.Arrays.asList;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "CONFERENCE")
-public class Conference {
+public class Conference{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "conf_id")
