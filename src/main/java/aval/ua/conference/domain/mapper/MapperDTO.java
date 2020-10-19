@@ -17,6 +17,9 @@ public interface MapperDTO {
     })
     ConferenceResponse mapToDTO(Conference conference);
 
+    @Mappings(value = {
+            @Mapping(target = "prtspscount", source = "members")
+    })
     Conference mapFromDTO(ConferenceRequest conferenceRequest);
 
     TalkResponse mapToDTO(Talk talk);

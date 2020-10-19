@@ -11,6 +11,7 @@ public class ConferenceRequest {
         private String name ;
         private String theme ;
         private Date date ;
+        private int members ;
 
         @Override
         public String toString() {

@@ -20,7 +20,7 @@ import java.util.*;
 public class Conference{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "conf_id")
+    @Column(name = "id")
     private Long id;
     @Column(name = "name")
     private String name;
