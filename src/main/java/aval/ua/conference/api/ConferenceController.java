@@ -1,13 +1,17 @@
 package aval.ua.conference.api;
 
 import aval.ua.conference.api.dto.*;
+import aval.ua.conference.config.MicrometerManager;
 import aval.ua.conference.domain.mapper.MapperDTO;
 import aval.ua.conference.exception.InvalidConferenceException;
 import aval.ua.conference.exception.InvalidException;
 import aval.ua.conference.exception.InvalidNameException;
 import aval.ua.conference.exception.InvalidTimeRegistrationException;
 import aval.ua.conference.service.ConferenceService;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +28,17 @@ import java.util.List;
 public class ConferenceController {
     private final ConferenceService conferenceService ;
     private final MapperDTO mapper;
+    private final MicrometerManager micrometerManager;
+
+    private static int conference_counter = 0;
 
 
+    @Timed(
+            value = "conferences.request",
+            histogram = true,
+            percentiles = {0.95, 0.99},
+            extraTags = {"version", "1.0"}
+    )
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ConferenceResponse> conferences() {
@@ -40,6 +53,7 @@ public class ConferenceController {
     @ResponseStatus(HttpStatus.OK)
     public long addConference(@RequestBody ConferenceRequest request){
         System.out.println("### RestController addConference: " + request);
+        micrometerManager.trackCounterMetrics("conference.counter", ++conference_counter, "Conference", "addConference");
         return conferenceService.addConference(mapper.mapFromDTO(request)).getId();
     }
 
