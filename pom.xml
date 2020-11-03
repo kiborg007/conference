@@ -11,7 +11,7 @@
     <groupId>aval.ua</groupId>
     <artifactId>conference</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>conference</name>
     <description>First project for Spring Boot</description>
 
@@ -208,6 +208,18 @@
                     </excludes>
                 </configuration>
             </plugin>
+<!--
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>2.6.0</version>
+                <configuration>
+                    <to>
+                        <image>aval.ua/confer</image>
+                    </to>
+                </configuration>
+            </plugin>
+-->
         </plugins>
     </build>
 
