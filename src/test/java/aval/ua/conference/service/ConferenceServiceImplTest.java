@@ -22,8 +22,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class ConferenceServiceImplTest {
     @Mock
-    private TalkService talkService;
-    @Mock
     private ConferenceRepository conferenceRepository;
     @InjectMocks
     private ConferenceServiceImpl conferenceService;
