@@ -1,45 +1,38 @@
 package aval.ua.conference.service;
 
 import aval.ua.conference.dao.ConferenceRepository;
-import aval.ua.conference.dao.TalkRepository;
 import aval.ua.conference.domain.entity.Conference;
 import aval.ua.conference.domain.entity.Talk;
+import aval.ua.conference.exception.InvalidConferenceException;
 import aval.ua.conference.exception.InvalidException;
 import aval.ua.conference.exception.InvalidNameException;
+import aval.ua.conference.exception.InvalidTimeRegistrationException;
 import aval.ua.conference.service.impl.ConferenceServiceImpl;
-import aval.ua.conference.service.impl.TalkServiceImpl;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.time.LocalDate;
+import java.util.*;
 
-import java.sql.Date;
-import java.util.Collections;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.notNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ConferenceServiceImplTest {
     @Mock
     private TalkService talkService;
     @Mock
     private ConferenceRepository conferenceRepository;
-
-    private ConferenceService conferenceService;
-
-    @Before
-    public void init() {
-        conferenceService = new ConferenceServiceImpl(conferenceRepository,talkService);
-    }
+    @InjectMocks
+    private ConferenceServiceImpl conferenceService;
 
     @Test
     public void ifNoConferencesPassedEmptyListIsReturned() {
-        assertThat(conferenceService.getAll(), is(empty()));
+        Conference[] list = new Conference[0];
+        when(conferenceRepository.findAll()).thenReturn(Arrays.asList(list));
+        assertEquals(conferenceService.getAll(), Arrays.asList(list));
     }
 
     @Test
@@ -47,26 +40,55 @@ public class ConferenceServiceImplTest {
         Talk talk = new Talk();
         Conference conference = new Conference();
         conference.setId(1L);
-        Date currentDate = new Date(System.currentTimeMillis());
-        int year = currentDate.getDay();
-        conference.setDate(new Date(year+1,10,20));
-        when(conferenceRepository.findById(1L)).thenReturn(java.util.Optional.of(conference));
-        assertThat(conferenceService.addTalk(1L, talk), is(conference));
+        conference.setDate(LocalDate.now().plusYears(1));
+        when(conferenceRepository.findById(1L)).thenReturn(Optional.of(conference));
+        assertEquals(conferenceService.addTalk(1L, talk), conference);
     }
 
-    @Test (expected = InvalidException.class)
+    @Test
     public void ifFalseRegistrationTime() {
-        InvalidException  invalidException= new InvalidException("Registration time is over");
         Talk talk = new Talk();
         Conference conference = new Conference();
         conference.setId(1L);
-        Date currentDate = new Date(System.currentTimeMillis());
-        int year = currentDate.getDay();
-        conference.setDate(new Date(year-1,10,20));
-        when(conferenceRepository.findById(1L)).thenReturn(java.util.Optional.of(conference));
-        assertThat(conferenceService.addTalk(1L, talk), is(invalidException));
-        assertThat(invalidException.getMessage(), is("Registration time is over"));
+        conference.setDate(LocalDate.now().minusYears(1));
+        when(conferenceRepository.findById(1L)).thenReturn(Optional.of(conference));
+        assertThrows(InvalidTimeRegistrationException.class,() ->  conferenceService.addTalk(1L, talk));
     }
 
+    @Test
+    public void ifConferenceDidNotFind() {
+        assertThrows(InvalidException.class,() ->  conferenceService.addTalk(1L, new Talk()));
+    }
 
+    @Test
+    public void ifConferenceNameAlreadyExist() {
+        Conference conference = new Conference();
+        conference.setName("test");
+        when(conferenceRepository.findByName("test")).thenReturn(Optional.of(conference));
+        assertThrows(InvalidConferenceException.class,() ->  conferenceService.addConference(conference));
+    }
+
+    @Test
+    public void ifConferenceHasMoreThan3TalksWithSameName() {
+        Conference conference = new Conference();
+        conference.setId(1L);
+        conference.setDate(LocalDate.now().plusYears(1));
+        Talk talk = new Talk();
+        talk.setId(1L);
+        talk.setName("test");
+        conference.getTalks().add(talk);
+        talk = new Talk();
+        talk.setId(2L);
+        talk.setName("test");
+        conference.getTalks().add(talk);
+        talk = new Talk();
+        talk.setId(3L);
+        talk.setName("test");
+        conference.getTalks().add(talk);
+        Talk talk_new = new Talk();
+        talk_new.setId(4L);
+        talk_new.setName("test");
+        when(conferenceRepository.findById(1L)).thenReturn(Optional.of(conference));
+        assertThrows(InvalidNameException.class,() ->  conferenceService.addTalk(1L, talk_new));
+    }
 }

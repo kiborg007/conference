@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
@@ -64,12 +65,12 @@ public class ConferenceEndpointApiTest extends AbstractEndpointApiTest{
 
             Conference conference = new Conference();
             conference.setId(2L);
-            conference.setDate(new Date(2020, 10, 10));
+            conference.setDate(LocalDate.of(2020, 10, 10));
             conference.setTalks(asList(talk));
 
             ConferenceResponse conferenceRequest = new ConferenceResponse();
             conferenceRequest.setId(2L);
-            conferenceRequest.setDate(new Date(2020, 10, 10));
+            conferenceRequest.setDate(LocalDate.of(2020, 10, 10));
             //conferenceRequest.setTalks_lst(asList(talkRequest));
 
 

@@ -5,6 +5,7 @@ import aval.ua.conference.api.dto.TalkRequest;
 import aval.ua.conference.domain.entity.Conference;
 import aval.ua.conference.domain.entity.Talk;
 import aval.ua.conference.service.ConferenceService;
+import org.apache.tomcat.jni.Local;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static java.util.stream.Collectors.joining;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
@@ -62,12 +64,12 @@ public class ConferenceControllerTest {
 
         conference = new Conference();
         conference.setId(2L);
-        conference.setDate(new Date(2020, 10, 10));
+        conference.setDate(LocalDate.of(2020, 10, 10));
         conference.setTalks(asList(talk));
 
         conferenceRequest = new ConferenceResponse();
         conferenceRequest.setId(2L);
-        conferenceRequest.setDate(new Date(2020, 10, 10));
+        conferenceRequest.setDate(LocalDate.of(2020, 10, 10));
 //        conferenceRequest.setTalks_lst(asList(talkRequest));
 //
 //        mockMvc = MockMvcBuilders

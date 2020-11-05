@@ -1,7 +1,7 @@
 package aval.ua.conference.api.dto;
 import lombok.*;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -9,7 +9,7 @@ public class ConferenceResponse {
     private Long id ;
     private String name ;
     private String theme ;
-    private Date date ;
+    private LocalDate date ;
     private int members ;
 
     @Override
