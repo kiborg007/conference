@@ -3,6 +3,7 @@ package aval.ua.conference.service.impl;
 import aval.ua.conference.dao.TalkRepository;
 import aval.ua.conference.domain.entity.Talk;
 import aval.ua.conference.exception.InvalidException;
+import aval.ua.conference.exception.TalkAlreadyExistException;
 import aval.ua.conference.service.TalkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,9 +26,9 @@ public class TalkServiceImpl implements TalkService {
     public Talk createTalk(Talk talk){
         System.out.println("##### createTalk "+talk);
 
-        if(talkRepository.findByName(talk.getDesc()).orElse(null) == null){
+        if(talkRepository.findByName(talk.getName()).orElse(null) == null){
             return talkRepository.save(talk);
-        } else throw new InvalidException("The name of the talk already exists");
+        } else throw new TalkAlreadyExistException("The name of the talk already exists");
     }
 
     @Override
