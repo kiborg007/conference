@@ -1,15 +1,11 @@
 package aval.ua.conference.domain.entity;
 
-import aval.ua.conference.api.dto.ConferenceRequest;
-import aval.ua.conference.api.dto.ConferenceResponse;
-import aval.ua.conference.domain.mapper.MapperDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 
 @Getter
@@ -27,7 +23,7 @@ public class Conference{
     @Column(name = "theme")
     private String theme;
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
     @Column(name = "prtspscount")
     private int prtspscount;
 

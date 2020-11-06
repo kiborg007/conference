@@ -9,12 +9,12 @@ import aval.ua.conference.exception.InvalidNameException;
 import aval.ua.conference.exception.InvalidTimeRegistrationException;
 import aval.ua.conference.service.ConferenceService;
 import aval.ua.conference.service.TalkService;
+import io.micrometer.core.annotation.Counted;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.sql.Date;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -59,6 +59,7 @@ public class ConferenceServiceImpl implements ConferenceService {
         return conference;
     }
 
+    @Counted(value = "Conference.counter", description = "addConference")
     @Override
     public Conference addConference(Conference conf) {
         if(conferenceRepository.findByName(conf.getName()).orElse(null) == null){
@@ -71,19 +72,18 @@ public class ConferenceServiceImpl implements ConferenceService {
 
     private boolean isThreeTalks (Conference conference, String name) {
         long cnt = conference.getTalks().stream().filter(talk -> talk.getName().equals(name)).count();
+        System.out.println("isThreeTalks name: " +name);
         System.out.println("isThreeTalks cnt: " +cnt);
         return cnt >= 3 ? true : false;
     }
 
-    private  boolean overTime (Date dateConference) {
-        Calendar c_talk = Calendar.getInstance();
-        Calendar c_conf = Calendar.getInstance();
-        c_talk.setTime(new Date(System.currentTimeMillis()));
-        c_conf.setTime(dateConference);
-        if(c_conf.get(Calendar.YEAR) - c_talk.get(Calendar.YEAR) < 0){
-            return true;
-        } else if(c_conf.get(Calendar.MONTH) - c_talk.get(Calendar.MONTH) < 1) {
-            return true;
+    private  boolean overTime (LocalDate dateConference) {
+        LocalDate c_talk = LocalDate.now();
+        LocalDate c_conf = dateConference;
+        if(dateConference.getYear() - c_talk.getYear() < 0){
+            if(dateConference.getMonth().getValue()- c_talk.getMonth().getValue() < 1) {
+                return true;
+            } else return false;
         } else return false;
     }
 }
