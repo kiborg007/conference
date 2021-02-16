@@ -1,0 +1,45 @@
+GET {{host-url}}/conferences
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+charset: UTF-8
+
+###
+
+GET {{host-url}}/conferences/2/talks
+Content-Type: application/json
+
+###
+
+POST {{host-url}}/conferences/2/talks
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+charset: UTF-8
+
+{  "name": "test",     "theme": "test",     "data": "20201010" }
+
+###
+
+POST {{host-url}}/conferences
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+charset: UTF-8
+
+{  "name": "Conf555",     "theme": "Conf44",     "date": "2020-10-10" }
+
+###
+POST http://localhost:8081/conferences
+Accept: application/json
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+  "name" : "Ivan",
+  "theme" : "Hybernate framework",
+  "date" : "2020-10-06",
+  "members" : "17"
+}
+
+

@@ -1,0 +1,12 @@
+conference:
+  - id: 1
+    name: "name1"
+    theme: "theme1"
+    date: "2020-12-20"
+    prtspscount: 10
+  - id: 2
+    name: "name2"
+    theme: "theme2"
+    date: "2020-12-22"
+    prtspscount: 20
+
